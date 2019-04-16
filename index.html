@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Testing Site</title>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN"
+        crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+
+<style media="screen">
+#top,
+#bottom {
+  position: fixed;
+  left: 0;
+  right: 0;
+  height: 50%;
+}
+
+#bottom {
+  bottom: 0;
+}
+
+</style>
+  </head>
+
+  <body>
+
+    <h2>NMT Testing Site</h2>
+    <div id="top">
+        <h4>TY-EN</h4>
+        <input type="text" id="tahitian_input">
+        <button type="button" id="submit_tahitian">
+          Submit
+        </button>
+        <div id="english_output">
+        </div>
+    </div>
+
+    <div id="bottom">
+        <h4>EN-TY</h4>
+        <input type="text" id="english_input">
+        <button type="button" id="submit_english">
+          Submit
+        </button>
+        <div id="tahitian_output">
+        </div>
+    </div>
+  </body>
+  <script type="text/javascript">
+  $(document).ready(function () {
+    console.log(window.location.pathname);
+
+  $("#submit_tahitian").click(function () {
+  var tahitian_input = $("#tahitian_input").val();
+  console.log(tahitian_input);
+  $("#english_output").html('');
+  $.ajax({
+      url: `/translate_tahitian`,
+      contentType: "application/json",
+      type: 'POST',
+      dataType: 'json',
+      data: JSON.stringify({
+        tahitian_input: tahitian_input
+      }),
+      success: function (data) {
+            var english_output = data.english_output;
+            console.log(english_output);
+            $("#english_output").append(english_output);
+          }
+        })
+      })
+
+      $("#submit_english").click(function () {
+      var english_input = $("#english_input").val();
+      console.log(english_input);
+      $("#tahitian_output").html('');
+      $.ajax({
+          url: `/translate_english`,
+          contentType: "application/json",
+          type: 'POST',
+          dataType: 'json',
+          data: JSON.stringify({
+            english_input: english_input
+          }),
+          success: function (data) {
+                var tahitian_output = data.tahitian_output;
+                console.log(tahitian_output);
+                $("#tahitian_output").append(tahitian_output);
+              }
+            })
+          })
+
+    })
+
+
+
+
+  </script>
+</html>
